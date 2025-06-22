@@ -7,6 +7,9 @@ from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 from datetime import datetime
 import asyncio
+import os
+from threading import Thread
+from flask import Flask, jsonify
 
 # Logger Setup
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -311,7 +314,26 @@ try:
 except Exception as e:
     LOGS.warning(f"Admin module not loaded: {e}")
 
+# Health check server for deployment monitoring
+health_app = Flask(__name__)
+
+@health_app.route('/health')
+def health_check():
+    return jsonify({
+        "status": "healthy",
+        "bot": "FindPartnerBot",
+        "timestamp": str(datetime.now())
+    })
+
+def run_health_server():
+    health_app.run(host='0.0.0.0', port=5000, debug=False)
+
 # Start the bot
 if __name__ == "__main__":
     LOGS.info("✅ Bot is starting...")
+    
+    # Start health check server in background
+    Thread(target=run_health_server, daemon=True).start()
+    LOGS.info("✅ Health check server started on port 5000")
+    
     bot.run()

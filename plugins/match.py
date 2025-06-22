@@ -46,6 +46,72 @@ async def find_partner(bot, message: Message):
         ])
     )
 
+@Client.on_callback_query(filters.regex("gender_filter"))
+async def gender_filter_match(bot, callback: CallbackQuery):
+    await callback.message.edit_text(
+        "🚻 **Gender Filter**\n\nWho would you like to match with?",
+        reply_markup=InlineKeyboardMarkup([
+            [InlineKeyboardButton("👨 Male", callback_data="filter_male")],
+            [InlineKeyboardButton("👩 Female", callback_data="filter_female")],
+            [InlineKeyboardButton("🌈 Any Gender", callback_data="filter_any")],
+            [InlineKeyboardButton("🏠 Back", callback_data="menu_find")]
+        ])
+    )
+
+@Client.on_callback_query(filters.regex("location_filter"))
+async def location_filter_match(bot, callback: CallbackQuery):
+    user_id = callback.from_user.id
+    user_data = users.find_one({"_id": user_id})
+    user_location = user_data.get("location", "Not set") if user_data else "Not set"
+    
+    await callback.message.edit_text(
+        f"📍 **Location Filter**\n\nYour location: {user_location}\n\nChoose matching preference:",
+        reply_markup=InlineKeyboardMarkup([
+            [InlineKeyboardButton("🏠 Same City/Country", callback_data="filter_same_location")],
+            [InlineKeyboardButton("🌍 Any Location", callback_data="filter_any_location")],
+            [InlineKeyboardButton("🏠 Back", callback_data="menu_find")]
+        ])
+    )
+
+@Client.on_callback_query(filters.regex("advanced_search"))
+async def advanced_search(bot, callback: CallbackQuery):
+    user_id = callback.from_user.id
+    user_data = users.find_one({"_id": user_id})
+    
+    if not user_data.get("premium", False):
+        return await callback.message.edit_text(
+            "👑 **Premium Feature**\n\nAdvanced search is only available for premium users!\n\nUpgrade to unlock:\n• Gender filters\n• Age range filters\n• Location filters\n• Interest matching",
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("👑 Get Premium", callback_data="get_premium")],
+                [InlineKeyboardButton("🏠 Back", callback_data="menu_find")]
+            ])
+        )
+    
+    await callback.message.edit_text(
+        "🔧 **Advanced Search**\n\nCustomize your search preferences:",
+        reply_markup=InlineKeyboardMarkup([
+            [InlineKeyboardButton("🚻 Gender Filter", callback_data="gender_filter")],
+            [InlineKeyboardButton("🎂 Age Range", callback_data="age_filter")],
+            [InlineKeyboardButton("📍 Location Filter", callback_data="location_filter")],
+            [InlineKeyboardButton("🎯 Start Search", callback_data="start_advanced_search")],
+            [InlineKeyboardButton("🏠 Back", callback_data="menu_find")]
+        ])
+    )
+
+@Client.on_callback_query(filters.regex("cancel_search"))
+async def cancel_search(bot, callback: CallbackQuery):
+    user_id = callback.from_user.id
+    if user_id in waiting_users:
+        del waiting_users[user_id]
+    
+    await callback.message.edit_text(
+        "❌ **Search Cancelled**\n\nYour search has been cancelled.",
+        reply_markup=InlineKeyboardMarkup([
+            [InlineKeyboardButton("🔍 Find New Match", callback_data="quick_match")],
+            [InlineKeyboardButton("🏠 Main Menu", callback_data="main_menu")]
+        ])
+    )
+
 @Client.on_callback_query(filters.regex("quick_match"))
 async def quick_match(bot, callback: CallbackQuery):
     user_id = callback.from_user.id

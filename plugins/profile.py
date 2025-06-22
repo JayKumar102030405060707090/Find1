@@ -145,6 +145,51 @@ async def edit_bio(bot, callback: CallbackQuery):
         ])
     )
 
+@Client.on_callback_query(filters.regex("edit_interests"))
+async def edit_interests(bot, callback: CallbackQuery):
+    await callback.message.edit_text(
+        "🎨 **Select Your Interests**\n\nChoose what you're interested in:",
+        reply_markup=InlineKeyboardMarkup([
+            [InlineKeyboardButton("🎵 Music", callback_data="interest_music"), InlineKeyboardButton("🎬 Movies", callback_data="interest_movies")],
+            [InlineKeyboardButton("📚 Books", callback_data="interest_books"), InlineKeyboardButton("🎮 Gaming", callback_data="interest_gaming")],
+            [InlineKeyboardButton("🏃 Sports", callback_data="interest_sports"), InlineKeyboardButton("🍳 Cooking", callback_data="interest_cooking")],
+            [InlineKeyboardButton("✈️ Travel", callback_data="interest_travel"), InlineKeyboardButton("🎨 Art", callback_data="interest_art")],
+            [InlineKeyboardButton("💻 Technology", callback_data="interest_tech"), InlineKeyboardButton("🌱 Nature", callback_data="interest_nature")],
+            [InlineKeyboardButton("✅ Done", callback_data="interests_done"), InlineKeyboardButton("❌ Cancel", callback_data="edit_profile")]
+        ])
+    )
+
+@Client.on_callback_query(filters.regex(r"interest_(\w+)"))
+async def toggle_interest(bot, callback: CallbackQuery):
+    user_id = callback.from_user.id
+    interest = callback.matches[0].group(1)
+    
+    user = users.find_one({"_id": user_id})
+    current_interests = user.get("interests", [])
+    
+    if interest in current_interests:
+        current_interests.remove(interest)
+        action = "removed"
+    else:
+        current_interests.append(interest)
+        action = "added"
+    
+    users.update_one({"_id": user_id}, {"$set": {"interests": current_interests}})
+    await callback.answer(f"✅ Interest {action}!", show_alert=False)
+
+@Client.on_callback_query(filters.regex("interests_done"))
+async def interests_done(bot, callback: CallbackQuery):
+    user_id = callback.from_user.id
+    user = users.find_one({"_id": user_id})
+    interests = user.get("interests", [])
+    
+    await callback.message.edit_text(
+        f"✅ **Interests Updated!**\n\nYour interests: {', '.join(interests) if interests else 'None selected'}",
+        reply_markup=InlineKeyboardMarkup([
+            [InlineKeyboardButton("🔙 Back to Edit", callback_data="edit_profile")]
+        ])
+    )
+
 @Client.on_callback_query(filters.regex("match_preferences"))
 async def match_preferences(bot, callback: CallbackQuery):
     await callback.message.edit_text(

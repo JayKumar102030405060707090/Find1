@@ -8,7 +8,7 @@ OWNER_ID = 6135117014
 LOG_GROUP_ID = -1002709482685
 
 # Bot Username (without @)
-BOT_USERNAME = "YourBotUsername"  # Replace with your bot's username
+BOT_USERNAME = "FindPartnerBot"  # Update this with your actual bot username
 
 # Referral + Coin Settings
 REFERRAL_COIN = 5

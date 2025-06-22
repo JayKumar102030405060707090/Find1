@@ -79,6 +79,24 @@ async def handle_report(bot, callback: CallbackQuery):
     
     reports.insert_one(report_data)
     
+    # Auto-moderation: If user has 3+ reports, auto-suspend temporarily
+    report_count = reports.count_documents({"reported": reported_user, "status": "pending"})
+    if report_count >= 3:
+        users.update_one({"_id": reported_user}, {"$set": {"temp_banned": True, "temp_ban_until": str(datetime.now())}})
+        
+        # End all chats for this user
+        active_chats.delete_many({"$or": [{"user1": reported_user}, {"user2": reported_user}]})
+        
+        try:
+            await bot.send_message(
+                reported_user,
+                "⚠️ **Account Temporarily Suspended**\n\n"
+                "Your account has been temporarily suspended due to multiple reports.\n"
+                "Our team will review your case shortly."
+            )
+        except:
+            pass
+    
     reason_names = {
         "abuse": "Abusive Language",
         "inappropriate": "Inappropriate Content", 
