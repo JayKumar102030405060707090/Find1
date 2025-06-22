@@ -12,7 +12,7 @@ REVEAL_COST = 100
 FEATURE_UNLOCK_COINS = 30
 
 # ✅ Updated MongoDB URI (for Pydroid compatibility)
-MONGO_URL = "mongodb://Ankit:Ankit@ac-qoqal8r-shard-00-00.qsqxi7z.mongodb.net:27017,ac-qoqal8r-shard-00-01.qsqxi7z.mongodb.net:27017,ac-qoqal8r-shard-00-02.qsqxi7z.mongodb.net:27017/?ssl=true&replicaSet=atlas-81h9fb-shard-0&authSource=admin&retryWrites=true&w=majority"
+MONGO_URL = "mongodb+srv://Ankit:Ankit@cluster0.qsqxi7z.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
 # Allowed genders
 GENDERS = ["Male", "Female", "Other"]
