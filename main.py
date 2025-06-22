@@ -652,6 +652,339 @@ A: ᴀᴅᴠᴀɴᴄᴇᴅ ғᴇᴀᴛᴜʀᴇs ʟɪᴋᴇ ғɪʟᴛᴇʀs ᴀɴ
             setting = data.replace("toggle_", "").replace("_", " ")
             await callback_query.answer(f"{setting} ᴛᴏɢɢʟᴇᴅ ✓", show_alert=True)
         
+        elif data == "contact_support":
+            await callback_query.message.edit_text(
+                tiny_caps("""📞 **ᴄᴏɴᴛᴀᴄᴛ sᴜᴘᴘᴏʀᴛ**
+
+ɴᴇᴇᴅ ʜᴇʟᴘ? ᴡᴇ'ʀᴇ ʜᴇʀᴇ ᴛᴏ ᴀssɪsᴛ ʏᴏᴜ!
+
+**📧 ᴄᴏɴᴛᴀᴄᴛ ᴏᴘᴛɪᴏɴs:**
+• ᴇᴍᴀɪʟ: support@findpartner.com
+• ᴛᴇʟᴇɢʀᴀᴍ: @FindPartnerSupport
+• ʀᴇsᴘᴏɴsᴇ ᴛɪᴍᴇ: 24-48 ʜᴏᴜʀs
+
+**⚡ ɪssᴜᴇ ᴄᴀᴛᴇɢᴏʀɪᴇs:**
+• ᴛᴇᴄʜɴɪᴄᴀʟ ɪssᴜᴇs
+• ᴘᴀʏᴍᴇɴᴛ ᴘʀᴏʙʟᴇᴍs
+• ᴀᴄᴄᴏᴜɴᴛ ɪssᴜᴇs
+• ғᴇᴀᴛᴜʀᴇ ʀᴇǫᴜᴇsᴛs"""),
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("💬 ᴄʜᴀᴛ ᴡɪᴛʜ sᴜᴘᴘᴏʀᴛ", url="https://t.me/FindPartnerSupport")],
+                    [InlineKeyboardButton("📧 ᴇᴍᴀɪʟ sᴜᴘᴘᴏʀᴛ", callback_data="email_support")],
+                    [InlineKeyboardButton("🤖 ᴀɪ ᴀssɪsᴛᴀɴᴛ", callback_data="bot_support")],
+                    [InlineKeyboardButton("🏠 ʙᴀᴄᴋ", callback_data="menu_help")]
+                ])
+            )
+        
+        elif data == "email_support":
+            await callback_query.message.edit_text(
+                tiny_caps("""📧 **ᴇᴍᴀɪʟ sᴜᴘᴘᴏʀᴛ**
+
+sᴇɴᴅ ʏᴏᴜʀ ᴅᴇᴛᴀɪʟᴇᴅ ǫᴜᴇʀʏ ᴛᴏ:
+**support@findpartner.com**
+
+**📝 ɪɴᴄʟᴜᴅᴇ ᴛʜᴇsᴇ ᴅᴇᴛᴀɪʟs:**
+• ʏᴏᴜʀ ᴜsᴇʀ ɪᴅ: `{callback_query.from_user.id}`
+• ᴅᴇsᴄʀɪᴘᴛɪᴏɴ ᴏғ ɪssᴜᴇ
+• sᴄʀᴇᴇɴsʜᴏᴛs ɪғ ᴀᴘᴘʟɪᴄᴀʙʟᴇ
+• sᴛᴇᴘs ᴛᴏ ʀᴇᴘʀᴏᴅᴜᴄᴇ
+
+**⏰ ᴇxᴘᴇᴄᴛᴇᴅ ʀᴇsᴘᴏɴsᴇ:** 24-48 ʜᴏᴜʀs"""),
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("📞 ʙᴀᴄᴋ ᴛᴏ sᴜᴘᴘᴏʀᴛ", callback_data="contact_support")]
+                ])
+            )
+        
+        elif data == "bot_support":
+            await callback_query.message.edit_text(
+                tiny_caps("""🤖 **ᴀɪ sᴜᴘᴘᴏʀᴛ ᴀssɪsᴛᴀɴᴛ**
+
+ɪ'ᴍ ʜᴇʀᴇ ᴛᴏ ʜᴇʟᴘ ᴡɪᴛʜ ᴄᴏᴍᴍᴏɴ ɪssᴜᴇs:
+
+**🔧 ᴄᴏᴍᴍᴏɴ sᴏʟᴜᴛɪᴏɴs:**
+• ʀᴇsᴛᴀʀᴛ ᴛʜᴇ ʙᴏᴛ (/start)
+• ᴄʜᴇᴄᴋ ʏᴏᴜʀ ɪɴᴛᴇʀɴᴇᴛ ᴄᴏɴɴᴇᴄᴛɪᴏɴ
+• ᴄʟᴇᴀʀ ᴄᴀᴄʜᴇ ᴀɴᴅ ʀᴇᴛʀʏ
+• ᴜᴘᴅᴀᴛᴇ ᴛᴇʟᴇɢʀᴀᴍ ᴀᴘᴘ
+
+**🎯 ɪғ ɪssᴜᴇ ᴘᴇʀsɪsᴛs:**
+ᴄᴏɴᴛᴀᴄᴛ ʜᴜᴍᴀɴ sᴜᴘᴘᴏʀᴛ ғᴏʀ ᴍᴀɴᴜᴀʟ ᴀssɪsᴛᴀɴᴄᴇ."""),
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("👨‍💼 ʜᴜᴍᴀɴ sᴜᴘᴘᴏʀᴛ", callback_data="contact_support")],
+                    [InlineKeyboardButton("❓ ғᴀǫ", callback_data="faq_menu")]
+                ])
+            )
+        
+        elif data == "more_faq":
+            await callback_query.message.edit_text(
+                tiny_caps("""❓ **ᴍᴏʀᴇ ғᴀǫs**
+
+**Q: ʜᴏᴡ ᴅᴏ ɪ ʀᴇᴘᴏʀᴛ ᴀ ᴜsᴇʀ?**
+A: ᴜsᴇ ᴛʜᴇ "ʀᴇᴘᴏʀᴛ" ʙᴜᴛᴛᴏɴ ᴅᴜʀɪɴɢ ᴄʜᴀᴛ ᴏʀ /report
+
+**Q: ᴄᴀɴ ɪ ᴄʜᴀɴɢᴇ ᴍʏ ᴀɢᴇ/ɢᴇɴᴅᴇʀ?**
+A: ʏᴇs! ɢᴏ ᴛᴏ ᴘʀᴏғɪʟᴇ > ᴇᴅɪᴛ ᴘʀᴏғɪʟᴇ
+
+**Q: ᴡʜʏ ᴀᴍ ɪ ɴᴏᴛ ɢᴇᴛᴛɪɴɢ ᴍᴀᴛᴄʜᴇs?**
+A: ᴄᴏᴍᴘʟᴇᴛᴇ ʏᴏᴜʀ ᴘʀᴏғɪʟᴇ ᴀɴᴅ ᴛʀʏ ᴅɪғғᴇʀᴇɴᴛ ғɪʟᴛᴇʀs
+
+**Q: ʜᴏᴡ ᴛᴏ ᴜɴʙʟᴏᴄᴋ sᴏᴍᴇᴏɴᴇ?**
+A: ɢᴏ ᴛᴏ sᴇᴛᴛɪɴɢs > ʙʟᴏᴄᴋᴇᴅ ᴜsᴇʀs
+
+**Q: ᴄᴀɴ ɪ ɢᴇᴛ ʀᴇғᴜɴᴅ ғᴏʀ ᴄᴏɪɴs?**
+A: ᴄᴏɴᴛᴀᴄᴛ sᴜᴘᴘᴏʀᴛ ᴡɪᴛʜ ᴛʀᴀɴsᴀᴄᴛɪᴏɴ ᴅᴇᴛᴀɪʟs"""),
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("📞 ᴄᴏɴᴛᴀᴄᴛ sᴜᴘᴘᴏʀᴛ", callback_data="contact_support")],
+                    [InlineKeyboardButton("🔙 ʙᴀᴄᴋ", callback_data="faq_menu")]
+                ])
+            )
+        
+        elif data == "safety_guide":
+            await callback_query.message.edit_text(
+                tiny_caps("""🛡️ **sᴀғᴇᴛʏ ɢᴜɪᴅᴇ**
+
+**🚨 sᴛᴀʏ sᴀғᴇ ᴏɴʟɪɴᴇ:**
+• ɴᴇᴠᴇʀ sʜᴀʀᴇ ᴘᴇʀsᴏɴᴀʟ ɪɴғᴏ (ᴀᴅᴅʀᴇss, ᴘʜᴏɴᴇ)
+• ᴅᴏɴ'ᴛ sᴇɴᴅ ᴍᴏɴᴇʏ ᴛᴏ sᴛʀᴀɴɢᴇʀs
+• ᴍᴇᴇᴛ ɪɴ ᴘᴜʙʟɪᴄ ᴘʟᴀᴄᴇs ᴏɴʟʏ
+• ᴛʀᴜsᴛ ʏᴏᴜʀ ɪɴsᴛɪɴᴄᴛs
+
+**🚫 ʀᴇᴅ ғʟᴀɢs:**
+• ᴀsᴋɪɴɢ ғᴏʀ ᴍᴏɴᴇʏ/ɢɪғᴛs
+• ᴘʀᴇssᴜʀɪɴɢ ғᴏʀ ᴘᴇʀsᴏɴᴀʟ ɪɴғᴏ
+• ɪɴᴀᴘᴘʀᴏᴘʀɪᴀᴛᴇ ᴄᴏɴᴠᴇʀsᴀᴛɪᴏɴs
+• ʀᴇғᴜsɪɴɢ ᴠɪᴅᴇᴏ ᴄᴀʟʟs
+
+**📱 ʀᴇᴘᴏʀᴛɪɴɢ:**
+ᴜsᴇ ᴛʜᴇ ʀᴇᴘᴏʀᴛ ʙᴜᴛᴛᴏɴ ɪᴍᴍᴇᴅɪᴀᴛᴇʟʏ!"""),
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("🚨 ʀᴇᴘᴏʀᴛ sᴏᴍᴇᴏɴᴇ", callback_data="report_user")],
+                    [InlineKeyboardButton("🔙 ʙᴀᴄᴋ", callback_data="user_guide")]
+                ])
+            )
+        
+        elif data == "chat_tips":
+            await callback_query.message.edit_text(
+                tiny_caps("""💡 **ᴄʜᴀᴛᴛɪɴɢ ᴛɪᴘs**
+
+**🌟 ɢʀᴇᴀᴛ ᴄᴏɴᴠᴇʀsᴀᴛɪᴏɴ sᴛᴀʀᴛᴇʀs:**
+• "ᴡʜᴀᴛ's ʏᴏᴜʀ ғᴀᴠᴏʀɪᴛᴇ ʜᴏʙʙʏ?"
+• "ᴛᴇʟʟ ᴍᴇ sᴏᴍᴇᴛʜɪɴɢ ɪɴᴛᴇʀᴇsᴛɪɴɢ ᴀʙᴏᴜᴛ ʏᴏᴜʀsᴇʟғ"
+• "ᴡʜᴀᴛ's ʏᴏᴜʀ ᴅʀᴇᴀᴍ ᴠᴀᴄᴀᴛɪᴏɴ?"
+
+**💬 ᴋᴇᴇᴘ ɪᴛ ɪɴᴛᴇʀᴇsᴛɪɴɢ:**
+• ᴀsᴋ ᴏᴘᴇɴ-ᴇɴᴅᴇᴅ ǫᴜᴇsᴛɪᴏɴs
+• sʜᴀʀᴇ ғᴜɴ sᴛᴏʀɪᴇs
+• ʙᴇ ɢᴇɴᴜɪɴᴇ ᴀɴᴅ ғʀɪᴇɴᴅʟʏ
+• ᴜsᴇ ᴇᴍᴏᴊɪs sᴘᴀʀɪɴɢʟʏ
+
+**❌ ᴀᴠᴏɪᴅ:**
+• ᴏɴᴇ-ᴡᴏʀᴅ ʀᴇsᴘᴏɴsᴇs
+• ᴛᴏᴏ ᴘᴇʀsᴏɴᴀʟ ǫᴜᴇsᴛɪᴏɴs ᴇᴀʀʟʏ
+• ɴᴇɢᴀᴛɪᴠᴇ ᴛᴏᴘɪᴄs"""),
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("💕 ғʟɪʀᴛ ᴛɪᴘs", callback_data="flirt_mode")],
+                    [InlineKeyboardButton("🔙 ʙᴀᴄᴋ", callback_data="user_guide")]
+                ])
+            )
+        
+        elif data == "coin_purchases":
+            user_data = users.find_one({"_id": user_id})
+            purchase_history = user_data.get("purchase_history", []) if user_data else []
+            
+            if not purchase_history:
+                history_text = tiny_caps("💰 **ᴄᴏɪɴ ᴘᴜʀᴄʜᴀsᴇs**\n\n❌ ɴᴏ ᴘᴜʀᴄʜᴀsᴇ ʜɪsᴛᴏʀʏ ғᴏᴜɴᴅ.")
+            else:
+                history_text = tiny_caps("💰 **ᴄᴏɪɴ ᴘᴜʀᴄʜᴀsᴇs**\n\n")
+                for purchase in purchase_history[-5:]:  # Last 5 purchases
+                    history_text += f"📅 {purchase.get('date', 'Unknown')}\n💎 +{purchase.get('amount', 0)} coins\n💳 ₹{purchase.get('price', 0)}\n\n"
+            
+            await callback_query.message.edit_text(
+                history_text,
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("💳 ʙᴜʏ ᴍᴏʀᴇ", callback_data="buy_coins")],
+                    [InlineKeyboardButton("🔙 ʙᴀᴄᴋ", callback_data="transaction_history")]
+                ])
+            )
+        
+        elif data == "coin_spending":
+            # Get spending history from transactions
+            from pymongo import MongoClient
+            mongo_client = MongoClient(MONGO_URL)
+            transactions_db = mongo_client['find_partner']['transactions']
+            spending = list(transactions_db.find({"user_id": user_id, "amount": {"$lt": 0}}).sort("timestamp", -1).limit(10))
+            
+            if not spending:
+                spending_text = tiny_caps("💸 **ᴄᴏɪɴ sᴘᴇɴᴅɪɴɢ**\n\n❌ ɴᴏ sᴘᴇɴᴅɪɴɢ ʜɪsᴛᴏʀʏ ғᴏᴜɴᴅ.")
+            else:
+                spending_text = tiny_caps("💸 **ᴄᴏɪɴ sᴘᴇɴᴅɪɴɢ**\n\n")
+                for transaction in spending:
+                    transaction_type = transaction.get('type', 'Unknown')
+                    amount = abs(transaction.get('amount', 0))
+                    date = transaction.get('timestamp', 'Unknown')[:10]
+                    spending_text += f"📅 {date}\n💎 -{amount} coins\n🎯 {transaction_type.replace('_', ' ').title()}\n\n"
+            
+            await callback_query.message.edit_text(
+                spending_text,
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("💰 ᴇᴀʀɴ ᴍᴏʀᴇ", callback_data="daily_bonus")],
+                    [InlineKeyboardButton("🔙 ʙᴀᴄᴋ", callback_data="transaction_history")]
+                ])
+            )
+        
+        elif data == "referral_earnings":
+            user_data = users.find_one({"_id": user_id})
+            ref_count = user_data.get("ref_count", 0) if user_data else 0
+            total_earned = ref_count * REFERRAL_COIN
+            
+            # Get referred users with timestamps
+            referred_users = list(users.find({"ref_by": user_id}).sort("joined_at", -1).limit(10))
+            
+            earnings_text = tiny_caps(f"""🎁 **ʀᴇғᴇʀʀᴀʟ ᴇᴀʀɴɪɴɢs**
+
+💰 **ᴛᴏᴛᴀʟ ᴇᴀʀɴᴇᴅ**: {total_earned} ᴄᴏɪɴs
+👥 **ᴛᴏᴛᴀʟ ʀᴇғᴇʀʀᴀʟs**: {ref_count}
+
+**ʀᴇᴄᴇɴᴛ ʀᴇғᴇʀʀᴀʟs:**""")
+            
+            if referred_users:
+                for user in referred_users:
+                    name = user.get("name", "Unknown")
+                    date = user.get("joined_at", "Unknown")[:10]
+                    earnings_text += f"\n👤 {name} - {date} (+{REFERRAL_COIN} coins)"
+            else:
+                earnings_text += tiny_caps("\n❌ ɴᴏ ʀᴇғᴇʀʀᴀʟs ʏᴇᴛ")
+            
+            await callback_query.message.edit_text(
+                earnings_text,
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("📤 ʀᴇғᴇʀ ᴍᴏʀᴇ", callback_data="menu_referral")],
+                    [InlineKeyboardButton("🔙 ʙᴀᴄᴋ", callback_data="transaction_history")]
+                ])
+            )
+        
+        elif data == "manage_blocked_users":
+            # Get blocked users list
+            from pymongo import MongoClient
+            mongo_client = MongoClient(MONGO_URL)
+            blocked_db = mongo_client['find_partner']['blocked_users']
+            blocked_list = list(blocked_db.find({"blocker": user_id}))
+            
+            if not blocked_list:
+                blocked_text = tiny_caps("🚫 **ʙʟᴏᴄᴋᴇᴅ ᴜsᴇʀs**\n\n✅ ɴᴏ ʙʟᴏᴄᴋᴇᴅ ᴜsᴇʀs")
+                keyboard = [[InlineKeyboardButton("🔙 ʙᴀᴄᴋ", callback_data="privacy_settings")]]
+            else:
+                blocked_text = tiny_caps(f"🚫 **ʙʟᴏᴄᴋᴇᴅ ᴜsᴇʀs** ({len(blocked_list)})\n\n")
+                keyboard = []
+                
+                for blocked in blocked_list[:10]:  # Show first 10
+                    blocked_id = blocked.get("blocked")
+                    try:
+                        blocked_user = users.find_one({"_id": blocked_id})
+                        name = blocked_user.get("name", "Unknown") if blocked_user else "Unknown"
+                        blocked_text += f"👤 {name}\n"
+                        keyboard.append([InlineKeyboardButton(f"🔓 ᴜɴʙʟᴏᴄᴋ {name}", callback_data=f"unblock_{blocked_id}")])
+                    except:
+                        continue
+                
+                keyboard.append([InlineKeyboardButton("🔙 ʙᴀᴄᴋ", callback_data="privacy_settings")])
+            
+            await callback_query.message.edit_text(
+                blocked_text,
+                reply_markup=InlineKeyboardMarkup(keyboard)
+            )
+        
+        elif data.startswith("unblock_"):
+            blocked_id = int(data.replace("unblock_", ""))
+            from pymongo import MongoClient
+            mongo_client = MongoClient(MONGO_URL)
+            blocked_db = mongo_client['find_partner']['blocked_users']
+            
+            result = blocked_db.delete_one({"blocker": user_id, "blocked": blocked_id})
+            if result.deleted_count > 0:
+                await callback_query.answer("✅ ᴜsᴇʀ ᴜɴʙʟᴏᴄᴋᴇᴅ sᴜᴄᴄᴇssғᴜʟʟʏ!", show_alert=True)
+                # Refresh the blocked users list
+                await manage_blocked_users_callback(bot, callback_query)
+            else:
+                await callback_query.answer("❌ ғᴀɪʟᴇᴅ ᴛᴏ ᴜɴʙʟᴏᴄᴋ ᴜsᴇʀ", show_alert=True)
+        
+        elif data == "profile_visibility":
+            user_data = users.find_one({"_id": user_id})
+            current_visibility = user_data.get("profile_visibility", "public") if user_data else "public"
+            
+            await callback_query.message.edit_text(
+                tiny_caps(f"""👁️ **ᴘʀᴏғɪʟᴇ ᴠɪsɪʙɪʟɪᴛʏ**
+
+ᴄᴜʀʀᴇɴᴛ sᴇᴛᴛɪɴɢ: **{current_visibility.title()}**
+
+**ᴠɪsɪʙɪʟɪᴛʏ ᴏᴘᴛɪᴏɴs:**
+• **ᴘᴜʙʟɪᴄ**: ᴇᴠᴇʀʏᴏɴᴇ ᴄᴀɴ sᴇᴇ ʏᴏᴜʀ ᴘʀᴏғɪʟᴇ
+• **ᴘʀɪᴠᴀᴛᴇ**: ᴏɴʟʏ ᴍᴀᴛᴄʜᴇᴅ ᴜsᴇʀs ᴄᴀɴ sᴇᴇ
+• **ғʀɪᴇɴᴅs**: ᴏɴʟʏ ᴀᴄᴄᴇᴘᴛᴇᴅ ᴄᴏɴɴᴇᴄᴛɪᴏɴs"""),
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("🌐 ᴘᴜʙʟɪᴄ", callback_data="set_visibility_public")],
+                    [InlineKeyboardButton("🔒 ᴘʀɪᴠᴀᴛᴇ", callback_data="set_visibility_private")],
+                    [InlineKeyboardButton("👥 ғʀɪᴇɴᴅs ᴏɴʟʏ", callback_data="set_visibility_friends")],
+                    [InlineKeyboardButton("🔙 ʙᴀᴄᴋ", callback_data="privacy_settings")]
+                ])
+            )
+        
+        elif data.startswith("set_visibility_"):
+            visibility = data.replace("set_visibility_", "")
+            users.update_one({"_id": user_id}, {"$set": {"profile_visibility": visibility}})
+            await callback_query.answer(f"✅ ᴘʀᴏғɪʟᴇ ᴠɪsɪʙɪʟɪᴛʏ sᴇᴛ ᴛᴏ {visibility}!", show_alert=True)
+        
+        elif data == "age_filter":
+            user_data = users.find_one({"_id": user_id})
+            current_min = user_data.get("age_filter_min", 18) if user_data else 18
+            current_max = user_data.get("age_filter_max", 99) if user_data else 99
+            
+            await callback_query.message.edit_text(
+                tiny_caps(f"""🎂 **ᴀɢᴇ ʀᴀɴɢᴇ ғɪʟᴛᴇʀ**
+
+ᴄᴜʀʀᴇɴᴛ ʀᴀɴɢᴇ: **{current_min} - {current_max} ʏᴇᴀʀs**
+
+sᴇʟᴇᴄᴛ ʏᴏᴜʀ ᴘʀᴇғᴇʀʀᴇᴅ ᴀɢᴇ ʀᴀɴɢᴇ:"""),
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("👶 18-25", callback_data="age_range_18_25")],
+                    [InlineKeyboardButton("👨 26-35", callback_data="age_range_26_35")],
+                    [InlineKeyboardButton("👴 36-50", callback_data="age_range_36_50")],
+                    [InlineKeyboardButton("🧓 50+", callback_data="age_range_50_99")],
+                    [InlineKeyboardButton("🌐 ᴀɴʏ ᴀɢᴇ", callback_data="age_range_18_99")],
+                    [InlineKeyboardButton("🔧 ᴄᴜsᴛᴏᴍ", callback_data="age_custom")],
+                    [InlineKeyboardButton("🔙 ʙᴀᴄᴋ", callback_data="advanced_search")]
+                ])
+            )
+        
+        elif data.startswith("age_range_"):
+            age_data = data.replace("age_range_", "").split("_")
+            min_age, max_age = int(age_data[0]), int(age_data[1])
+            
+            users.update_one(
+                {"_id": user_id}, 
+                {"$set": {"age_filter_min": min_age, "age_filter_max": max_age}}
+            )
+            await callback_query.answer(f"✅ ᴀɢᴇ ʀᴀɴɢᴇ sᴇᴛ ᴛᴏ {min_age}-{max_age}!", show_alert=True)
+        
+        elif data == "start_advanced_search":
+            user_data = users.find_one({"_id": user_id})
+            if not user_data.get("premium", False):
+                return await callback_query.answer("👑 ᴘʀᴇᴍɪᴜᴍ ʀᴇǫᴜɪʀᴇᴅ!", show_alert=True)
+            
+            # Deduct coins for advanced search
+            if user_data.get("coins", 0) < FEATURE_UNLOCK_COINS:
+                return await callback_query.answer(f"💸 ɴᴇᴇᴅ {FEATURE_UNLOCK_COINS} ᴄᴏɪɴs!", show_alert=True)
+            
+            users.update_one({"_id": user_id}, {"$inc": {"coins": -FEATURE_UNLOCK_COINS}})
+            
+            # Start advanced matching logic here
+            await callback_query.message.edit_text(
+                tiny_caps("🔧 **ᴀᴅᴠᴀɴᴄᴇᴅ sᴇᴀʀᴄʜ sᴛᴀʀᴛᴇᴅ**\n\nsᴇᴀʀᴄʜɪɴɢ ᴡɪᴛʜ ʏᴏᴜʀ ᴘʀᴇғᴇʀᴇɴᴄᴇs..."),
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("❌ ᴄᴀɴᴄᴇʟ", callback_data="cancel_search")]
+                ])
+            )
+        
         else:
             # Default handler for unknown callbacks
             await callback_query.answer("ᴄᴏᴍɪɴɢ sᴏᴏɴ! 🚀", show_alert=True)
