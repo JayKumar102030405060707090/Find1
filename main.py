@@ -985,6 +985,307 @@ sᴇʟᴇᴄᴛ ʏᴏᴜʀ ᴘʀᴇғᴇʀʀᴇᴅ ᴀɢᴇ ʀᴀɴɢᴇ:"""),
                 ])
             )
         
+        elif data == "edit_profile":
+            await callback_query.message.edit_text(
+                tiny_caps("📝 **ᴇᴅɪᴛ ᴘʀᴏғɪʟᴇ**\n\nᴡʜᴀᴛ ᴡᴏᴜʟᴅ ʏᴏᴜ ʟɪᴋᴇ ᴛᴏ ᴄʜᴀɴɢᴇ?"),
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("📝 ɴᴀᴍᴇ", callback_data="edit_name")],
+                    [InlineKeyboardButton("🎂 ᴀɢᴇ", callback_data="edit_age")],
+                    [InlineKeyboardButton("👤 ɢᴇɴᴅᴇʀ", callback_data="edit_gender")],
+                    [InlineKeyboardButton("📍 ʟᴏᴄᴀᴛɪᴏɴ", callback_data="edit_location")],
+                    [InlineKeyboardButton("💬 ʙɪᴏ", callback_data="edit_bio")],
+                    [InlineKeyboardButton("🎯 ɪɴᴛᴇʀᴇsᴛs", callback_data="edit_interests")],
+                    [InlineKeyboardButton("🏠 ʙᴀᴄᴋ", callback_data="menu_profile")]
+                ])
+            )
+        
+        elif data == "view_profile":
+            user_data = users.find_one({"_id": user_id})
+            if user_data:
+                profile_text = tiny_caps(f"""👤 **ʏᴏᴜʀ ᴘʀᴏғɪʟᴇ**
+
+📝 **ɴᴀᴍᴇ**: {user_data.get('name', 'Not set')}
+🎂 **ᴀɢᴇ**: {user_data.get('age', 'Not set')}
+👤 **ɢᴇɴᴅᴇʀ**: {user_data.get('gender', 'Not set')}
+📍 **ʟᴏᴄᴀᴛɪᴏɴ**: {user_data.get('location', 'Not set')}
+💬 **ʙɪᴏ**: {user_data.get('bio', 'Not set')}
+🎯 **ɪɴᴛᴇʀᴇsᴛs**: {', '.join(user_data.get('interests', [])) or 'Not set'}
+🔍 **ʟᴏᴏᴋɪɴɢ ғᴏʀ**: {user_data.get('looking_for', 'Not set')}""")
+            else:
+                profile_text = tiny_caps("❌ ᴘʀᴏғɪʟᴇ ɴᴏᴛ ғᴏᴜɴᴅ.")
+            
+            await callback_query.message.edit_text(
+                profile_text,
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("📝 ᴇᴅɪᴛ ᴘʀᴏғɪʟᴇ", callback_data="edit_profile")],
+                    [InlineKeyboardButton("🏠 ʙᴀᴄᴋ", callback_data="menu_profile")]
+                ])
+            )
+        
+        elif data == "quick_match":
+            await callback_query.message.edit_text(
+                tiny_caps("🎯 **ǫᴜɪᴄᴋ ᴍᴀᴛᴄʜ**\n\nsᴇᴀʀᴄʜɪɴɢ ғᴏʀ ᴀᴠᴀɪʟᴀʙʟᴇ ᴜsᴇʀs..."),
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("❌ ᴄᴀɴᴄᴇʟ sᴇᴀʀᴄʜ", callback_data="cancel_search")]
+                ])
+            )
+        
+        elif data == "gender_filter":
+            await callback_query.message.edit_text(
+                tiny_caps("🔧 **ɢᴇɴᴅᴇʀ ғɪʟᴛᴇʀ**\n\nᴄʜᴏᴏsᴇ ɢᴇɴᴅᴇʀ ᴘʀᴇғᴇʀᴇɴᴄᴇ:"),
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("👨 ᴍᴀʟᴇ", callback_data="filter_male")],
+                    [InlineKeyboardButton("👩 ғᴇᴍᴀʟᴇ", callback_data="filter_female")],
+                    [InlineKeyboardButton("🌈 ᴀɴʏ", callback_data="filter_any")],
+                    [InlineKeyboardButton("🏠 ʙᴀᴄᴋ", callback_data="menu_find")]
+                ])
+            )
+        
+        elif data == "location_filter":
+            await callback_query.message.edit_text(
+                tiny_caps("📍 **ʟᴏᴄᴀᴛɪᴏɴ ғɪʟᴛᴇʀ**\n\nᴄʜᴏᴏsᴇ ʟᴏᴄᴀᴛɪᴏɴ ᴘʀᴇғᴇʀᴇɴᴄᴇ:"),
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("📍 sᴀᴍᴇ ʟᴏᴄᴀᴛɪᴏɴ", callback_data="filter_same_location")],
+                    [InlineKeyboardButton("🌍 ᴀɴʏ ʟᴏᴄᴀᴛɪᴏɴ", callback_data="filter_any_location")],
+                    [InlineKeyboardButton("🏠 ʙᴀᴄᴋ", callback_data="menu_find")]
+                ])
+            )
+        
+        elif data == "ai_match":
+            await callback_query.message.edit_text(
+                tiny_caps("🤖 **ᴀɪ ᴄʜᴀᴛ sᴛᴀʀᴛᴇᴅ!**\n\nʏᴏᴜ ᴀʀᴇ ɴᴏᴡ ᴄʜᴀᴛᴛɪɴɢ ᴡɪᴛʜ ᴏᴜʀ ᴀɪ ᴀssɪsᴛᴀɴᴛ!\n\nsᴇɴᴅ ᴀ ᴍᴇssᴀɢᴇ ᴛᴏ sᴛᴀʀᴛ ᴄᴏɴᴠᴇʀsᴀᴛɪᴏɴ."),
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("🚫 sᴛᴏᴘ ᴀɪ ᴄʜᴀᴛ", callback_data="stop_ai_chat")],
+                    [InlineKeyboardButton("🔄 ғɪɴᴅ ʀᴇᴀʟ ᴘᴇʀsᴏɴ", callback_data="quick_match")]
+                ])
+            )
+        
+        elif data == "advanced_search":
+            user_data = users.find_one({"_id": user_id})
+            if not user_data.get("premium", False):
+                await callback_query.answer("👑 ᴘʀᴇᴍɪᴜᴍ ʀᴇǫᴜɪʀᴇᴅ ғᴏʀ ᴀᴅᴠᴀɴᴄᴇᴅ sᴇᴀʀᴄʜ!", show_alert=True)
+                return
+            
+            await callback_query.message.edit_text(
+                tiny_caps("🔧 **ᴀᴅᴠᴀɴᴄᴇᴅ sᴇᴀʀᴄʜ**\n\nᴄᴜsᴛᴏᴍɪᴢᴇ ʏᴏᴜʀ sᴇᴀʀᴄʜ ᴘʀᴇғᴇʀᴇɴᴄᴇs:"),
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("👤 ɢᴇɴᴅᴇʀ ғɪʟᴛᴇʀ", callback_data="gender_filter")],
+                    [InlineKeyboardButton("🎂 ᴀɢᴇ ʀᴀɴɢᴇ", callback_data="age_filter")],
+                    [InlineKeyboardButton("📍 ʟᴏᴄᴀᴛɪᴏɴ", callback_data="location_filter")],
+                    [InlineKeyboardButton("🎯 ɪɴᴛᴇʀᴇsᴛs", callback_data="interest_filter")],
+                    [InlineKeyboardButton("🧠 ᴘᴇʀsᴏɴᴀʟɪᴛʏ", callback_data="personality_test")],
+                    [InlineKeyboardButton("🔍 sᴛᴀʀᴛ sᴇᴀʀᴄʜ", callback_data="start_advanced_search")],
+                    [InlineKeyboardButton("🏠 ʙᴀᴄᴋ", callback_data="menu_find")]
+                ])
+            )
+        
+        elif data == "daily_bonus":
+            user_data = users.find_one({"_id": user_id})
+            last_bonus = user_data.get("daily_bonus_claimed", "") if user_data else ""
+            today = str(datetime.now().date())
+            
+            if last_bonus == today:
+                await callback_query.answer("⏰ ᴅᴀɪʟʏ ʙᴏɴᴜs ᴀʟʀᴇᴀᴅʏ ᴄʟᴀɪᴍᴇᴅ!", show_alert=True)
+                return
+            
+            bonus_amount = random.randint(5, 20)
+            users.update_one(
+                {"_id": user_id}, 
+                {
+                    "$inc": {"coins": bonus_amount},
+                    "$set": {"daily_bonus_claimed": today}
+                }
+            )
+            
+            await callback_query.message.edit_text(
+                tiny_caps(f"🎁 **ᴅᴀɪʟʏ ʙᴏɴᴜs ᴄʟᴀɪᴍᴇᴅ!**\n\n💰 +{bonus_amount} ᴄᴏɪɴs ᴀᴅᴅᴇᴅ!\n\nᴄᴏᴍᴇ ʙᴀᴄᴋ ᴛᴏᴍᴏʀʀᴏᴡ ғᴏʀ ᴍᴏʀᴇ!"),
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("💰 ᴄʜᴇᴄᴋ ᴡᴀʟʟᴇᴛ", callback_data="menu_wallet")],
+                    [InlineKeyboardButton("🏠 ᴍᴀɪɴ ᴍᴇɴᴜ", callback_data="main_menu")]
+                ])
+            )
+        
+        elif data == "buy_coins":
+            await callback_query.message.edit_text(
+                tiny_caps("""💳 **ʙᴜʏ ᴄᴏɪɴs**
+
+ᴄʜᴏᴏsᴇ ᴀ ᴄᴏɪɴ ᴘᴀᴄᴋᴀɢᴇ:
+
+💎 **100 ᴄᴏɪɴs** - ₹20
+💎 **500 ᴄᴏɪɴs** - ₹80 (20% ᴏғғ!)
+💎 **1000 ᴄᴏɪɴs** - ₹150 (25% ᴏғғ!)
+💎 **2500 ᴄᴏɪɴs** - ₹300 (40% ᴏғғ!)"""),
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("💎 100 ᴄᴏɪɴs - ₹20", callback_data="purchase_100")],
+                    [InlineKeyboardButton("💎 500 ᴄᴏɪɴs - ₹80", callback_data="purchase_500")],
+                    [InlineKeyboardButton("💎 1000 ᴄᴏɪɴs - ₹150", callback_data="purchase_1000")],
+                    [InlineKeyboardButton("💎 2500 ᴄᴏɪɴs - ₹300", callback_data="purchase_2500")],
+                    [InlineKeyboardButton("🏠 ʙᴀᴄᴋ", callback_data="menu_wallet")]
+                ])
+            )
+        
+        elif data.startswith("purchase_"):
+            coin_amount = int(data.replace("purchase_", ""))
+            prices = {100: 20, 500: 80, 1000: 150, 2500: 300}
+            price = prices.get(coin_amount, 20)
+            
+            await callback_query.message.edit_text(
+                tiny_caps(f"""💳 **ᴘᴜʀᴄʜᴀsᴇ ᴄᴏɴғɪʀᴍᴀᴛɪᴏɴ**
+
+💎 **ᴄᴏɪɴs**: {coin_amount}
+💰 **ᴘʀɪᴄᴇ**: ₹{price}
+
+**ᴘᴀʏᴍᴇɴᴛ ᴍᴇᴛʜᴏᴅs:**
+• UPI / PhonePe / GPay / Paytm
+• Bank Transfer
+• PayPal
+
+ᴄᴏɴᴛᴀᴄᴛ @YourPaymentBot ᴛᴏ ᴄᴏᴍᴘʟᴇᴛᴇ ᴘᴀʏᴍᴇɴᴛ"""),
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("💳 ᴄᴏɴᴛᴀᴄᴛ ғᴏʀ ᴘᴀʏᴍᴇɴᴛ", url="https://t.me/YourPaymentBot")],
+                    [InlineKeyboardButton("🔙 ʙᴀᴄᴋ", callback_data="buy_coins")]
+                ])
+            )
+        
+        elif data == "get_premium":
+            user_data = users.find_one({"_id": user_id})
+            current_coins = user_data.get("coins", 0) if user_data else 0
+            
+            if user_data.get("premium", False):
+                await callback_query.answer("👑 ʏᴏᴜ ᴀʟʀᴇᴀᴅʏ ʜᴀᴠᴇ ᴘʀᴇᴍɪᴜᴍ!", show_alert=True)
+                return
+            
+            await callback_query.message.edit_text(
+                tiny_caps(f"""👑 **ᴘʀᴇᴍɪᴜᴍ ᴜᴘɢʀᴀᴅᴇ**
+
+💰 **ᴄᴏsᴛ**: {PREMIUM_COST} ᴄᴏɪɴs
+💎 **ʏᴏᴜʀ ᴄᴏɪɴs**: {current_coins}
+
+**🔥 ᴘʀᴇᴍɪᴜᴍ ғᴇᴀᴛᴜʀᴇs:**
+• 🎯 ᴀᴅᴠᴀɴᴄᴇᴅ sᴇᴀʀᴄʜ ғɪʟᴛᴇʀs
+• 🔍 ᴜɴʟɪᴍɪᴛᴇᴅ ʀᴇᴠᴇᴀʟs
+• ⭐ ᴘʀɪᴏʀɪᴛʏ ᴍᴀᴛᴄʜɪɴɢ
+• 🧠 ᴘᴇʀsᴏɴᴀʟɪᴛʏ ᴍᴀᴛᴄʜɪɴɢ
+• 💕 ғʟɪʀᴛ ᴄʜᴀᴛ ᴀssɪsᴛᴀɴᴛ
+• 📊 ᴀᴅᴠᴀɴᴄᴇᴅ ᴀɴᴀʟʏᴛɪᴄs"""),
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("👑 ɢᴇᴛ ᴘʀᴇᴍɪᴜᴍ ɴᴏᴡ!", callback_data="confirm_premium")] if current_coins >= PREMIUM_COST else [InlineKeyboardButton("💳 ʙᴜʏ ᴍᴏʀᴇ ᴄᴏɪɴs", callback_data="buy_coins")],
+                    [InlineKeyboardButton("🏠 ʙᴀᴄᴋ", callback_data="menu_wallet")]
+                ])
+            )
+        
+        elif data == "confirm_premium":
+            user_data = users.find_one({"_id": user_id})
+            if user_data.get("coins", 0) < PREMIUM_COST:
+                await callback_query.answer("💸 ɪɴsᴜғғɪᴄɪᴇɴᴛ ᴄᴏɪɴs!", show_alert=True)
+                return
+            
+            users.update_one(
+                {"_id": user_id}, 
+                {
+                    "$inc": {"coins": -PREMIUM_COST},
+                    "$set": {"premium": True, "premium_since": str(datetime.now())}
+                }
+            )
+            
+            await callback_query.message.edit_text(
+                tiny_caps("🎉 **ᴄᴏɴɢʀᴀᴛᴜʟᴀᴛɪᴏɴs!** 🎉\n\n👑 ʏᴏᴜ ᴀʀᴇ ɴᴏᴡ ᴀ ᴘʀᴇᴍɪᴜᴍ ᴍᴇᴍʙᴇʀ!\n\nᴇɴᴊᴏʏ ᴀʟʟ ᴘʀᴇᴍɪᴜᴍ ғᴇᴀᴛᴜʀᴇs! ✨"),
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("🔧 ᴀᴅᴠᴀɴᴄᴇᴅ sᴇᴀʀᴄʜ", callback_data="advanced_search")],
+                    [InlineKeyboardButton("🏠 ᴍᴀɪɴ ᴍᴇɴᴜ", callback_data="main_menu")]
+                ])
+            )
+        
+        elif data == "my_referrals":
+            referred_users = list(users.find({"ref_by": user_id}))
+            if not referred_users:
+                referrals_text = tiny_caps("👥 **ᴍʏ ʀᴇғᴇʀʀᴀʟs**\n\n❌ ɴᴏ ʀᴇғᴇʀʀᴀʟs ʏᴇᴛ")
+            else:
+                referrals_text = tiny_caps(f"👥 **ᴍʏ ʀᴇғᴇʀʀᴀʟs** ({len(referred_users)})\n\n")
+                for i, ref_user in enumerate(referred_users[:10]):
+                    name = ref_user.get("name", "Unknown")
+                    join_date = ref_user.get("joined_at", "Unknown")[:10]
+                    referrals_text += f"{i+1}. {name} - {join_date}\n"
+            
+            await callback_query.message.edit_text(
+                referrals_text,
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("📤 sʜᴀʀᴇ ʀᴇғᴇʀʀᴀʟ ʟɪɴᴋ", callback_data="menu_referral")],
+                    [InlineKeyboardButton("🏠 ʙᴀᴄᴋ", callback_data="menu_referral")]
+                ])
+            )
+        
+        elif data.startswith("filter_"):
+            filter_type = data.replace("filter_", "")
+            if filter_type in ["male", "female", "any"]:
+                await callback_query.answer(f"✅ ɢᴇɴᴅᴇʀ ғɪʟᴛᴇʀ sᴇᴛ: {filter_type}", show_alert=True)
+                users.update_one({"_id": user_id}, {"$set": {"gender_filter": filter_type}})
+            elif filter_type in ["same_location", "any_location"]:
+                await callback_query.answer(f"✅ ʟᴏᴄᴀᴛɪᴏɴ ғɪʟᴛᴇʀ sᴇᴛ: {filter_type}", show_alert=True)
+                users.update_one({"_id": user_id}, {"$set": {"location_filter": filter_type}})
+        
+        elif data == "stop_ai_chat":
+            await callback_query.message.edit_text(
+                tiny_caps("🤖 **ᴀɪ ᴄʜᴀᴛ sᴛᴏᴘᴘᴇᴅ**\n\nᴛʜᴀɴᴋ ʏᴏᴜ ғᴏʀ ᴄʜᴀᴛᴛɪɴɢ ᴡɪᴛʜ ᴏᴜʀ ᴀɪ!"),
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("🔍 ғɪɴᴅ ʀᴇᴀʟ ᴘᴇʀsᴏɴ", callback_data="quick_match")],
+                    [InlineKeyboardButton("🏠 ᴍᴀɪɴ ᴍᴇɴᴜ", callback_data="main_menu")]
+                ])
+            )
+        
+        elif data == "redeem_menu":
+            await callback_query.message.edit_text(
+                tiny_caps("""🔑 **ʀᴇᴅᴇᴇᴍ ᴄᴏᴅᴇ**
+
+ʜᴀᴠᴇ ᴀ ᴄᴏᴅᴇ? ᴇɴᴛᴇʀ ɪᴛ ʙᴇʟᴏᴡ!
+
+**ʜᴏᴡ ᴛᴏ ɢᴇᴛ ᴄᴏᴅᴇs:**
+• ᴘᴀʀᴛɪᴄɪᴘᴀᴛᴇ ɪɴ ᴄᴏɴᴛᴇsᴛs
+• ғᴏʟʟᴏᴡ ᴏᴜʀ sᴏᴄɪᴀʟ ᴍᴇᴅɪᴀ
+• sᴘᴇᴄɪᴀʟ ᴇᴠᴇɴᴛs
+
+sᴇɴᴅ ᴀ ᴍᴇssᴀɢᴇ ᴡɪᴛʜ ʏᴏᴜʀ ᴄᴏᴅᴇ!"""),
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("🏠 ʙᴀᴄᴋ", callback_data="menu_wallet")]
+                ])
+            )
+        
+        elif data == "report_user":
+            await callback_query.message.edit_text(
+                tiny_caps("""🚨 **ʀᴇᴘᴏʀᴛ ᴜsᴇʀ**
+
+ᴡʜᴀᴛ ᴛʏᴘᴇ ᴏғ ɪssᴜᴇ ᴀʀᴇ ʏᴏᴜ ʀᴇᴘᴏʀᴛɪɴɢ?"""),
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("🚫 ɪɴᴀᴘᴘʀᴏᴘʀɪᴀᴛᴇ ᴄᴏɴᴛᴇɴᴛ", callback_data="report_inappropriate")],
+                    [InlineKeyboardButton("💸 sᴄᴀᴍ/ғʀᴀᴜᴅ", callback_data="report_scam")],
+                    [InlineKeyboardButton("👤 ғᴀᴋᴇ ᴘʀᴏғɪʟᴇ", callback_data="report_fake")],
+                    [InlineKeyboardButton("💔 ʜᴀʀᴀssᴍᴇɴᴛ", callback_data="report_harassment")],
+                    [InlineKeyboardButton("🔙 ʙᴀᴄᴋ", callback_data="safety_guide")]
+                ])
+            )
+        
+        elif data.startswith("report_"):
+            report_type = data.replace("report_", "")
+            await callback_query.answer("✅ ʀᴇᴘᴏʀᴛ sᴜʙᴍɪᴛᴛᴇᴅ! ᴏᴜʀ ᴛᴇᴀᴍ ᴡɪʟʟ ʀᴇᴠɪᴇᴡ ɪᴛ.", show_alert=True)
+        
+        elif data == "interest_filter":
+            await callback_query.message.edit_text(
+                tiny_caps("🎯 **ɪɴᴛᴇʀᴇsᴛ ғɪʟᴛᴇʀ**\n\nᴄʜᴏᴏsᴇ ɪɴᴛᴇʀᴇsᴛs ᴛᴏ ᴍᴀᴛᴄʜ:"),
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton("🎵 ᴍᴜsɪᴄ", callback_data="interest_music")],
+                    [InlineKeyboardButton("🎬 ᴍᴏᴠɪᴇs", callback_data="interest_movies")],
+                    [InlineKeyboardButton("🏃 sᴘᴏʀᴛs", callback_data="interest_sports")],
+                    [InlineKeyboardButton("📚 ʀᴇᴀᴅɪɴɢ", callback_data="interest_reading")],
+                    [InlineKeyboardButton("🍳 ᴄᴏᴏᴋɪɴɢ", callback_data="interest_cooking")],
+                    [InlineKeyboardButton("🎮 ɢᴀᴍɪɴɢ", callback_data="interest_gaming")],
+                    [InlineKeyboardButton("✅ ᴅᴏɴᴇ", callback_data="advanced_search")]
+                ])
+            )
+        
+        elif data.startswith("interest_"):
+            interest = data.replace("interest_", "")
+            await callback_query.answer(f"✅ ɪɴᴛᴇʀᴇsᴛ ғɪʟᴛᴇʀ: {interest}", show_alert=True)
+        
         else:
             # Default handler for unknown callbacks
             await callback_query.answer("ᴄᴏᴍɪɴɢ sᴏᴏɴ! 🚀", show_alert=True)
