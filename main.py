@@ -655,14 +655,6 @@ A: ᴀᴅᴠᴀɴᴄᴇᴅ ғᴇᴀᴛᴜʀᴇs ʟɪᴋᴇ ғɪʟᴛᴇʀs ᴀɴ
         else:
             # Default handler for unknown callbacks
             await callback_query.answer("ᴄᴏᴍɪɴɢ sᴏᴏɴ! 🚀", show_alert=True)
-                    [InlineKeyboardButton("😏 ᴘʟᴀʏғᴜʟ & ᴛᴇᴀsɪɴɢ", callback_data="flirt_playful")],
-                    [InlineKeyboardButton("🔥 ʙᴏʟᴅ & ᴄᴏɴғɪᴅᴇɴᴛ", callback_data="flirt_bold")],
-                    [InlineKeyboardButton("🏠 ʙᴀᴄᴋ", callback_data="menu_find")]
-                ])
-            )
-        
-        elif data == "dismiss":
-            await callback_query.message.delete()
         
         await callback_query.answer()
         
