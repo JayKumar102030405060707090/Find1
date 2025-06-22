@@ -7,6 +7,57 @@ from random import choice
 import asyncio
 from datetime import datetime
 
+def tiny_caps(text):
+    """Convert text to tiny caps font"""
+    tiny_map = {
+        'a': 'ᴀ', 'b': 'ʙ', 'c': 'ᴄ', 'd': 'ᴅ', 'e': 'ᴇ', 'f': 'ғ', 'g': 'ɢ', 'h': 'ʜ',
+        'i': 'ɪ', 'j': 'ᴊ', 'k': 'ᴋ', 'l': 'ʟ', 'm': 'ᴍ', 'n': 'ɴ', 'o': 'ᴏ', 'p': 'ᴘ',
+        'q': 'ǫ', 'r': 'ʀ', 's': 's', 't': 'ᴛ', 'u': 'ᴜ', 'v': 'ᴠ', 'w': 'ᴡ', 'x': 'x',
+        'y': 'ʏ', 'z': 'ᴢ', 'A': 'ᴀ', 'B': 'ʙ', 'C': 'ᴄ', 'D': 'ᴅ', 'E': 'ᴇ', 'F': 'ғ',
+        'G': 'ɢ', 'H': 'ʜ', 'I': 'ɪ', 'J': 'ᴊ', 'K': 'ᴋ', 'L': 'ʟ', 'M': 'ᴍ', 'N': 'ɴ',
+        'O': 'ᴏ', 'P': 'ᴘ', 'Q': 'ǫ', 'R': 'ʀ', 'S': 's', 'T': 'ᴛ', 'U': 'ᴜ', 'V': 'ᴠ',
+        'W': 'ᴡ', 'X': 'x', 'Y': 'ʏ', 'Z': 'ᴢ'
+    }
+    return ''.join(tiny_map.get(char, char) for char in text)
+
+# Professional flirting responses
+FLIRT_RESPONSES = {
+    "sweet": [
+        "Your message just made my day brighter! 🌟 How has your day been treating you?",
+        "I love how thoughtful you are! 💕 What's something that made you smile today?",
+        "You have such a warm energy! ☀️ What's your favorite way to spend a cozy evening?",
+        "Your words are like music to my ears! 🎵 Do you have a favorite song that moves you?",
+        "I find myself looking forward to your messages! 💫 What's something you're passionate about?"
+    ],
+    "playful": [
+        "Well, aren't you quite the charmer! 😏 Think you can keep up with my wit?",
+        "I see you're trying to impress me... it's working! 😉 What's your secret talent?",
+        "You're dangerous with those words! 🔥 What other tricks do you have up your sleeve?",
+        "I'm starting to think you might be trouble... the good kind! 😈 Prove me right!",
+        "Smooth talker, eh? 😎 Let's see if your actions match your words!"
+    ],
+    "bold": [
+        "I like your confidence! 💪 What drives your ambition?",
+        "You know exactly what you want, don't you? 🔥 I respect that boldness!",
+        "There's something magnetic about your energy! ⚡ What's your biggest dream?",
+        "You've definitely caught my attention! 👀 What makes you so irresistible?",
+        "I admire someone who goes after what they want! 💯 What's your next big move?"
+    ]
+}
+
+CONVERSATION_STARTERS = [
+    "If you could have dinner with anyone in history, who would it be and why? 🍽️",
+    "What's the most spontaneous thing you've ever done? ✨",
+    "If you could master any skill instantly, what would you choose? 🎯",
+    "What's your idea of a perfect weekend? 🌅",
+    "If you could live anywhere in the world, where would it be? 🌍",
+    "What's something that always makes you laugh? 😄",
+    "If you had a superpower, what would it be? 💫",
+    "What's the best advice you've ever received? 💭",
+    "What's your favorite way to unwind after a long day? 🛀",
+    "If you could time travel, would you go to the past or future? ⏰"
+]
+
 client = MongoClient(MONGO_URL)
 db = client['find_partner']
 users = db['users']
@@ -30,19 +81,20 @@ async def find_partner(bot, message: Message):
 
     if is_chatting(user_id):
         return await message.reply(
-            "🔄 You're already in a chat!",
+            tiny_caps("🔄 You're already in a chat!"),
             reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton("🚫 Stop Current Chat", callback_data="stop_chat")]
+                [InlineKeyboardButton("🚫 sᴛᴏᴘ ᴄᴜʀʀᴇɴᴛ ᴄʜᴀᴛ", callback_data="stop_chat")]
             ])
         )
 
     await message.reply(
-        "🔍 **Find Your Match**\n\nChoose your matching preference:",
+        tiny_caps("🔍 **Find Your Match**\n\nChoose your matching preference:"),
         reply_markup=InlineKeyboardMarkup([
-            [InlineKeyboardButton("🎯 Quick Match", callback_data="quick_match")],
-            [InlineKeyboardButton("🔧 Gender Filter", callback_data="gender_filter")],
-            [InlineKeyboardButton("📍 Location Filter", callback_data="location_filter")],
-            [InlineKeyboardButton("🤖 Chat with AI Bot", callback_data="ai_match")]
+            [InlineKeyboardButton("🎯 ǫᴜɪᴄᴋ ᴍᴀᴛᴄʜ", callback_data="quick_match")],
+            [InlineKeyboardButton("🔧 ɢᴇɴᴅᴇʀ ғɪʟᴛᴇʀ", callback_data="gender_filter")],
+            [InlineKeyboardButton("📍 ʟᴏᴄᴀᴛɪᴏɴ ғɪʟᴛᴇʀ", callback_data="location_filter")],
+            [InlineKeyboardButton("🤖 ᴄʜᴀᴛ ᴡɪᴛʜ ᴀɪ ʙᴏᴛ", callback_data="ai_match")],
+            [InlineKeyboardButton("💕 ғʟɪʀᴛ ᴍᴏᴅᴇ", callback_data="flirt_mode")]
         ])
     )
 
@@ -98,6 +150,61 @@ async def advanced_search(bot, callback: CallbackQuery):
         ])
     )
 
+@Client.on_callback_query(filters.regex("flirt_sweet|flirt_playful|flirt_bold"))
+async def start_flirt_chat(bot, callback: CallbackQuery):
+    user_id = callback.from_user.id
+    flirt_style = callback.data.split("_")[1]
+    
+    if is_chatting(user_id):
+        return await callback.answer(tiny_caps("🔄 You're already in a chat!"), show_alert=True)
+    
+    # Store flirt preference
+    users.update_one({"_id": user_id}, {"$set": {"flirt_style": flirt_style}})
+    
+    # Create AI flirt chat
+    active_chats.insert_one({
+        "user1": user_id, 
+        "user2": f"FLIRT_AI_{flirt_style.upper()}", 
+        "revealed": False,
+        "started_at": str(datetime.now()),
+        "chat_type": "flirt"
+    })
+    
+    style_names = {"sweet": "Sweet & Romantic", "playful": "Playful & Teasing", "bold": "Bold & Confident"}
+    
+    flirt_markup = InlineKeyboardMarkup([
+        [InlineKeyboardButton("💘 ɢᴇᴛ ғʟɪʀᴛ sᴜɢɢᴇsᴛɪᴏɴ", callback_data="get_flirt_tip")],
+        [InlineKeyboardButton("🎯 ᴄᴏɴᴠᴇʀsᴀᴛɪᴏɴ sᴛᴀʀᴛᴇʀ", callback_data="get_conversation_starter")],
+        [InlineKeyboardButton("🚫 sᴛᴏᴘ ᴄʜᴀᴛ", callback_data="stop_chat")],
+        [InlineKeyboardButton("🔄 ғɪɴᴅ ʀᴇᴀʟ ᴘᴇʀsᴏɴ", callback_data="quick_match")]
+    ])
+    
+    welcome_msg = tiny_caps(f"""💕 **{style_names[flirt_style]} Flirt Chat Started!** 💕
+
+I'm your personal flirting coach! I'll help you with:
+🌹 Romantic conversation ideas
+💘 Charming responses
+🔥 Confidence boosters
+💝 Sweet compliments
+
+Start chatting and I'll respond in your chosen style!""")
+    
+    await callback.message.edit_text(welcome_msg, reply_markup=flirt_markup)
+
+@Client.on_callback_query(filters.regex("get_flirt_tip"))
+async def get_flirt_tip(bot, callback: CallbackQuery):
+    user_id = callback.from_user.id
+    user_data = users.find_one({"_id": user_id})
+    flirt_style = user_data.get("flirt_style", "sweet")
+    
+    tip = choice(FLIRT_RESPONSES[flirt_style])
+    await callback.answer(tiny_caps(f"💘 Flirt Tip: {tip}"), show_alert=True)
+
+@Client.on_callback_query(filters.regex("get_conversation_starter"))
+async def get_conversation_starter(bot, callback: CallbackQuery):
+    starter = choice(CONVERSATION_STARTERS)
+    await callback.answer(tiny_caps(f"🎯 Try this: {starter}"), show_alert=True)
+
 @Client.on_callback_query(filters.regex("cancel_search"))
 async def cancel_search(bot, callback: CallbackQuery):
     user_id = callback.from_user.id
@@ -105,10 +212,10 @@ async def cancel_search(bot, callback: CallbackQuery):
         del waiting_users[user_id]
     
     await callback.message.edit_text(
-        "❌ **Search Cancelled**\n\nYour search has been cancelled.",
+        tiny_caps("❌ **Search Cancelled**\n\nYour search has been cancelled."),
         reply_markup=InlineKeyboardMarkup([
-            [InlineKeyboardButton("🔍 Find New Match", callback_data="quick_match")],
-            [InlineKeyboardButton("🏠 Main Menu", callback_data="main_menu")]
+            [InlineKeyboardButton("🔍 ғɪɴᴅ ɴᴇᴡ ᴍᴀᴛᴄʜ", callback_data="quick_match")],
+            [InlineKeyboardButton("🏠 ᴍᴀɪɴ ᴍᴇɴᴜ", callback_data="main_menu")]
         ])
     )
 
@@ -330,20 +437,34 @@ async def forward_messages(bot, message: Message):
         # AI Response
         await asyncio.sleep(1)  # Simulate typing
         ai_response = choice(AI_RESPONSES)
-        await message.reply(f"🤖 **AI**: {ai_response}")
+        await message.reply(tiny_caps(f"🤖 **AI**: {ai_response}"))
+    elif partner_id.startswith("FLIRT_AI_"):
+        # Flirt AI Response
+        await asyncio.sleep(2)  # Simulate typing
+        user_data = users.find_one({"_id": user_id})
+        flirt_style = user_data.get("flirt_style", "sweet")
+        
+        flirt_response = choice(FLIRT_RESPONSES[flirt_style])
+        await message.reply(tiny_caps(f"💕 **Flirt Coach**: {flirt_response}"))
+        
+        # Sometimes add conversation starters
+        if len(message.text) < 20:  # Short messages get extra help
+            await asyncio.sleep(1)
+            starter = choice(CONVERSATION_STARTERS)
+            await message.reply(tiny_caps(f"💡 **Tip**: Try asking: {starter}"))
     else:
         # Forward to real user
         try:
             await bot.send_message(
                 partner_id,
-                f"💬 **Anonymous**: {message.text}",
+                tiny_caps(f"💬 **Anonymous**: {message.text}"),
                 reply_markup=InlineKeyboardMarkup([
-                    [InlineKeyboardButton("👁️ Reveal (100 coins)", callback_data="reveal_request")],
-                    [InlineKeyboardButton("🚫 Stop", callback_data="stop_chat")]
+                    [InlineKeyboardButton("👁️ ʀᴇᴠᴇᴀʟ (100 ᴄᴏɪɴs)", callback_data="reveal_request")],
+                    [InlineKeyboardButton("🚫 sᴛᴏᴘ", callback_data="stop_chat")]
                 ])
             )
         except Exception as e:
-            await message.reply("❌ Failed to send message. The other user might have left.")
+            await message.reply(tiny_caps("❌ Failed to send message. The other user might have left."))
             active_chats.delete_one({"_id": chat["_id"]})
 
 @Client.on_message(filters.command("stop") & filters.private)
