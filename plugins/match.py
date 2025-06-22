@@ -219,6 +219,147 @@ async def cancel_search(bot, callback: CallbackQuery):
         ])
     )
 
+@Client.on_callback_query(filters.regex("filter_male|filter_female|filter_any"))
+async def handle_gender_filter(bot, callback: CallbackQuery):
+    user_id = callback.from_user.id
+    filter_type = callback.data.split("_")[1]
+    
+    if is_chatting(user_id):
+        return await callback.answer(tiny_caps("🔄 ʏᴏᴜ'ʀᴇ ᴀʟʀᴇᴀᴅʏ ɪɴ ᴀ ᴄʜᴀᴛ!"), show_alert=True)
+    
+    # Store gender preference
+    users.update_one(
+        {"_id": user_id}, 
+        {"$set": {"gender_filter": filter_type}}, 
+        upsert=True
+    )
+    
+    # Look for matching users with opposite/compatible gender
+    gender_map = {"male": "Female", "female": "Male", "any": None}
+    target_gender = gender_map.get(filter_type)
+    
+    match_found = False
+    for other_id, data in list(waiting_users.items()):
+        if other_id != user_id and not is_blocked(user_id, other_id):
+            other_user_data = users.find_one({"_id": other_id})
+            if other_user_data:
+                other_gender = other_user_data.get("gender", "Not set")
+                if target_gender is None or other_gender == target_gender or target_gender == "Any":
+                    # Match found
+                    del waiting_users[other_id]
+                    active_chats.insert_one({
+                        "user1": user_id, 
+                        "user2": other_id, 
+                        "revealed": False,
+                        "started_at": str(datetime.now()),
+                        "filter_used": f"gender_{filter_type}"
+                    })
+                    
+                    match_markup = InlineKeyboardMarkup([
+                        [InlineKeyboardButton("👁️ ʀᴇᴠᴇᴀʟ ɪᴅᴇɴᴛɪᴛʏ (100 ᴄᴏɪɴs)", callback_data="reveal_request")],
+                        [InlineKeyboardButton("🚫 sᴛᴏᴘ ᴄʜᴀᴛ", callback_data="stop_chat")],
+                        [InlineKeyboardButton("🚨 ʀᴇᴘᴏʀᴛ ᴜsᴇʀ", callback_data="report_user")]
+                    ])
+                    
+                    await bot.send_message(
+                        other_id, 
+                        tiny_caps("🎯 **ᴍᴀᴛᴄʜ ғᴏᴜɴᴅ!** 🎯\n\nʏᴏᴜ'ʀᴇ ɴᴏᴡ ᴄʜᴀᴛᴛɪɴɢ ᴀɴᴏɴʏᴍᴏᴜsʟʏ.\nsᴛᴀʀᴛ ᴛʜᴇ ᴄᴏɴᴠᴇʀsᴀᴛɪᴏɴ! 💬"),
+                        reply_markup=match_markup
+                    )
+                    await callback.message.edit_text(
+                        tiny_caps("🎯 **ᴍᴀᴛᴄʜ ғᴏᴜɴᴅ!** 🎯\n\nʏᴏᴜ'ʀᴇ ɴᴏᴡ ᴄʜᴀᴛᴛɪɴɢ ᴀɴᴏɴʏᴍᴏᴜsʟʏ.\nsᴛᴀʀᴛ ᴛʜᴇ ᴄᴏɴᴠᴇʀsᴀᴛɪᴏɴ! 💬"),
+                        reply_markup=match_markup
+                    )
+                    match_found = True
+                    break
+    
+    if not match_found:
+        waiting_users[user_id] = {"filter": f"gender_{filter_type}", "added_at": datetime.now()}
+        
+        await callback.message.edit_text(
+            tiny_caps(f"⏳ **sᴇᴀʀᴄʜɪɴɢ ғᴏʀ {filter_type.title()} ᴘᴀʀᴛɴᴇʀ...**\n\n🔍 ʟᴏᴏᴋɪɴɢ ғᴏʀ sᴏᴍᴇᴏɴᴇ ᴀᴡᴇsᴏᴍᴇ ᴛᴏ ᴄʜᴀᴛ ᴡɪᴛʜ!\n⏰ ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ ᴡʜɪʟᴇ ᴡᴇ ғɪɴᴅ ʏᴏᴜʀ ᴘᴇʀғᴇᴄᴛ ᴍᴀᴛᴄʜ."),
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("❌ ᴄᴀɴᴄᴇʟ sᴇᴀʀᴄʜ", callback_data="cancel_search")],
+                [InlineKeyboardButton("🤖 ᴄʜᴀᴛ ᴡɪᴛʜ ᴀɪ ɪɴsᴛᴇᴀᴅ", callback_data="ai_match")]
+            ])
+        )
+
+@Client.on_callback_query(filters.regex("filter_same_location|filter_any_location"))
+async def handle_location_filter(bot, callback: CallbackQuery):
+    user_id = callback.from_user.id
+    filter_type = callback.data
+    
+    if is_chatting(user_id):
+        return await callback.answer(tiny_caps("🔄 ʏᴏᴜ'ʀᴇ ᴀʟʀᴇᴀᴅʏ ɪɴ ᴀ ᴄʜᴀᴛ!"), show_alert=True)
+    
+    # Store location preference
+    users.update_one(
+        {"_id": user_id}, 
+        {"$set": {"location_filter": filter_type}}, 
+        upsert=True
+    )
+    
+    user_data = users.find_one({"_id": user_id})
+    user_location = user_data.get("location", "") if user_data else ""
+    
+    match_found = False
+    for other_id, data in list(waiting_users.items()):
+        if other_id != user_id and not is_blocked(user_id, other_id):
+            if filter_type == "filter_any_location":
+                # Match with anyone
+                del waiting_users[other_id]
+                active_chats.insert_one({
+                    "user1": user_id, 
+                    "user2": other_id, 
+                    "revealed": False,
+                    "started_at": str(datetime.now()),
+                    "filter_used": "location_any"
+                })
+                
+                match_markup = InlineKeyboardMarkup([
+                    [InlineKeyboardButton("👁️ ʀᴇᴠᴇᴀʟ ɪᴅᴇɴᴛɪᴛʏ (100 ᴄᴏɪɴs)", callback_data="reveal_request")],
+                    [InlineKeyboardButton("🚫 sᴛᴏᴘ ᴄʜᴀᴛ", callback_data="stop_chat")]
+                ])
+                
+                await bot.send_message(other_id, tiny_caps("🎯 **ᴍᴀᴛᴄʜ ғᴏᴜɴᴅ!** 🎯"), reply_markup=match_markup)
+                await callback.message.edit_text(tiny_caps("🎯 **ᴍᴀᴛᴄʜ ғᴏᴜɴᴅ!** 🎯"), reply_markup=match_markup)
+                match_found = True
+                break
+            
+            elif filter_type == "filter_same_location" and user_location:
+                other_user_data = users.find_one({"_id": other_id})
+                if other_user_data and other_user_data.get("location", "") == user_location:
+                    # Same location match
+                    del waiting_users[other_id]
+                    active_chats.insert_one({
+                        "user1": user_id, 
+                        "user2": other_id, 
+                        "revealed": False,
+                        "started_at": str(datetime.now()),
+                        "filter_used": "location_same"
+                    })
+                    
+                    match_markup = InlineKeyboardMarkup([
+                        [InlineKeyboardButton("👁️ ʀᴇᴠᴇᴀʟ ɪᴅᴇɴᴛɪᴛʏ (100 ᴄᴏɪɴs)", callback_data="reveal_request")],
+                        [InlineKeyboardButton("🚫 sᴛᴏᴘ ᴄʜᴀᴛ", callback_data="stop_chat")]
+                    ])
+                    
+                    await bot.send_message(other_id, tiny_caps(f"🎯 **ʟᴏᴄᴀʟ ᴍᴀᴛᴄʜ ғᴏᴜɴᴅ!** 🎯\n📍 ʙᴏᴛʜ ғʀᴏᴍ: {user_location}"), reply_markup=match_markup)
+                    await callback.message.edit_text(tiny_caps(f"🎯 **ʟᴏᴄᴀʟ ᴍᴀᴛᴄʜ ғᴏᴜɴᴅ!** 🎯\n📍 ʙᴏᴛʜ ғʀᴏᴍ: {user_location}"), reply_markup=match_markup)
+                    match_found = True
+                    break
+    
+    if not match_found:
+        waiting_users[user_id] = {"filter": filter_type, "added_at": datetime.now()}
+        search_text = "sᴀᴍᴇ ʟᴏᴄᴀᴛɪᴏɴ" if filter_type == "filter_same_location" else "ᴀɴʏ ʟᴏᴄᴀᴛɪᴏɴ"
+        
+        await callback.message.edit_text(
+            tiny_caps(f"⏳ **sᴇᴀʀᴄʜɪɴɢ ({search_text})...**\n\n📍 ʟᴏᴏᴋɪɴɢ ғᴏʀ ᴘᴀʀᴛɴᴇʀs ɪɴ ʏᴏᴜʀ ᴀʀᴇᴀ!"),
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("❌ ᴄᴀɴᴄᴇʟ sᴇᴀʀᴄʜ", callback_data="cancel_search")]
+            ])
+        )
+
 @Client.on_callback_query(filters.regex("quick_match"))
 async def quick_match(bot, callback: CallbackQuery):
     user_id = callback.from_user.id
